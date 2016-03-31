@@ -10,13 +10,18 @@
 
 		//Width and height
 		var w = 900;
-		var h = 500;
-		var barPadding = 4;
+		var h = 800;
+		var barPadding = 1;
 		var baseColor= 210;
 		var heightModifier = 5;
-		var bottomPadding = 15;
+		var leftPadding = 300;
+		var barHeight = 60;
+		var barXPos = 80;
+		var textAdjust = (barHeight / 2) - 3;
 		
-		var dataset = [ 88, 8, 4, 66, 22, 12, 63, 24, 13, 57, 33, 10, 50, 35, 15, 5, 9, 86];
+		var dataset1 = [ 88, 8, 4, 66, 22, 12, 63, 24, 13, 57, 33, 10, 50, 35, 15, 5, 9, 86];
+		var dataset2 = [ "I felt creative","I felt an emotional reaction","I learned something new about the text",
+		"It confirmed my understanding of the text","It jogged my memory","The Wordle confused me"];
 		
 		//Create SVG element
 		var svg = d3.select("body")
@@ -25,19 +30,37 @@
 					.attr("height", h);
 
 		svg.selectAll("rect")
-			.data(dataset)
+			.data(dataset1)
 			.enter()
 			.append("rect")
+			.attr("y", function(d, i) {
+				if(i < 3){
+					return 0;
+				} else  if (i < 6) {
+					return barXPos;
+				} else  if ( i < 9) {
+					return barXPos * 2;
+				} else  if (i < 12) {
+					return barXPos * 3;
+				} else  if (i < 15) {
+					return barXPos * 4;
+				} else  if (i < 18) {
+					return barXPos * 5;
+				}
+			})
 			.attr("x", function(d, i) {
-				return i * (w / dataset.length);
+				if (i % 3 == 0){
+					return leftPadding;
+				} else if (i % 3 == 1) {
+					return leftPadding + (dataset1[i-1] * heightModifier) + 1;
+				} else if (i % 3 == 2) {
+					return leftPadding + ((dataset1[i-1] + dataset1[i-2]) * heightModifier) + 2;
+				}
 			})
-			.attr("y", function(d) {
-				return (h - bottomPadding) - (d * heightModifier);
-			})
-			.attr("width", w / dataset.length - barPadding)
-			.attr("height", function(d) {
+			.attr("width", function(d) {
 				return d * heightModifier;
 			})
+			.attr("height", barHeight)
 			.attr("fill", function(d, i) {
 				if (i%3 == 0){
 					return "rgb(50," + baseColor + ",50)"
@@ -47,23 +70,24 @@
 					return "rgb(" + baseColor + ", 50, 50)";
 				}
 			});
-		svg.selectAll("text")
-			.data(dataset)
+			svg.selectAll("text")
+			.data(dataset2)
 			.enter()
 			.append("text")
 			.text(function(d) {
 				return d;
 			})
-			.attr("x", function(d, i) {
-				return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+			.attr("y", function(d, i) {
+				return barHeight + barXPos*i - textAdjust;
 			})
-			.attr("y", function(d) {
-				return h;
+			.attr("x", function(d) {
+				return leftPadding-10;
 			})
 			.attr("font-family", "sans-serif")
-			.attr("font-size", "11px")
+			.attr("font-size", "15px")
 			.attr("fill", "black")
-			.attr("text-anchor", "middle");
+			.attr("text-anchor", "end");
 	</script>
 </body>
 </html>
+
