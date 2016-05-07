@@ -61,7 +61,7 @@ var publisherChart = dc.pieChart("#dc-publisher-chart");
 d3.csv("comics.csv", function (data) {
 
   // format our data
-	var dateFormat = d3.time.format("%b-%Y);
+	var dateFormat = d3.time.format("%b-%Y");
 
 	data.forEach(function(d) {
 	d.pubDate = shortDateFormat.parse(d.date);
