@@ -34,22 +34,31 @@
 <body>
 
 <div class='container' style='font: 12px sans-serif;'>
-
- <div class='row'>
-    <div class='span4' id='dc-publisher-chart'>
-	  <h4>
-		Publisher
-        <span>
-          <a class="reset"
-            href="javascript:publisherChart.filterAll();dc.redrawAll();"
-            style="display: none;">
-            reset
-          </a>
-        </span>
-      </h4>
-    </div>   
-  </div>
-
+	<div class="dc-data-count" style="float: left;">
+		<h2>New Zealand Earthquakes
+		  <span>
+			<span class="filter-count"></span>
+			 selected out of 
+			<span class="total-count"></span>
+			 records | 
+			<a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+		  </span>
+		</h2>
+	</div>
+	<div class='row'>
+		<div class='span4' id='dc-publisher-chart'>
+		  <h4>
+			Publisher
+			<span>
+			  <a class="reset"
+				href="javascript:publisherChart.filterAll();dc.redrawAll();"
+				style="display: none;">
+				reset
+			  </a>
+			</span>
+		  </h4>
+		</div>   
+	</div>
 </div>
   
 <script type="text/javascript">
@@ -64,13 +73,13 @@ d3.csv("comics.csv", function (data) {
 	var dateFormat = d3.time.format("%b-%Y");
 
 	data.forEach(function(d) {
-	d.pubDate = shortDateFormat.parse(d.date);
-	d.name = +d.name;
-	d.hero = +d.hero;
-	d.company = +d.company;
-	d.price = +d.price;
-	d.pagecount = +d.pagecount;
-	d.ratio = +d.ratio;
+		d.pubDate = dateFormat.parse(d.date);
+		d.name = +d.name;
+		d.hero = +d.hero;
+		d.company = +d.company;
+		d.price = +d.price;
+		d.pagecount = +d.pagecount;
+		d.ratio = +d.ratio;
 	});
    
   });
