@@ -17,6 +17,9 @@
 		<style type="text/css"></style>
 		
 		<style>
+			h4 {
+			text-align:center;
+			}
 			h4 span {
 			font-size:14px;
 			font-weight:normal;
@@ -43,9 +46,55 @@
 					</span>
 				</h2>
 			</div>
+			
 			<div class='row'>
-				<div class='span4' id='dc-publisher-chart'>
+				<div class='span12' id='dc-herocount-chart'>
 					<h4>
+						Top 10 Heroes
+						<span>
+							<a class="reset"
+							href="javascript:heroCountChart.filterAll();dc.redrawAll();"
+							style="display: none;">
+								reset
+							</a>
+						</span>
+					</h4>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			
+			<div class='row'>
+				<div class='span12' id='dc-yearcount-chart'>
+					<h4>
+						Comics per year
+						<span>
+							<a class="reset"
+							href="javascript:yearCountChart.filterAll();dc.redrawAll();"
+							style="display: none;">
+								reset
+							</a>
+						</span>
+					</h4>
+				</div>
+			</div>
+				
+		
+			<div class='row'>
+				<div class='span6' id='dc-monthly-chart'>
+					<h4>
+						Comics per month
+						<span>
+							<a class="reset"
+							href="javascript:monthlyChart.filterAll();dc.redrawAll();"
+							style="display: none;">
+								reset
+							</a>
+						</span>
+					</h4>
+					<div class="clearfix"></div>
+				</div>
+				<div class='span6' id='dc-publisher-chart'>
+					<h4 class='text-center'>
 						Publisher
 						<span>
 							<a class="reset"
@@ -57,6 +106,7 @@
 					</h4>
 				</div>   
 			</div>
+		
 			<div class='row'>
 				<div class='span12'>
 					<table class='table table-hover' id='dc-table-graph'>
@@ -79,16 +129,19 @@
 			// Create the dc.js chart objects & link to div
 			var dataTable = dc.dataTable("#dc-table-graph");
 			var publisherChart = dc.pieChart("#dc-publisher-chart");
+			var monthlyChart = dc.rowChart("#dc-monthly-chart");
+			var heroCountChart = dc.rowChart('#dc-herocount-chart');
+			var yearCountChart = dc.barChart('#dc-yearcount-chart');
 			
 			// load data from a csv file
 			d3.csv("comics.csv", function (data) {
 				
 				// format our data
-				var dateFormat = d3.time.format("%B-%Y");
+				var dateFormat = d3.time.format("%Y-%m");
 				
 				data.forEach(function(d) {
-					d.pubDate = d.pubDate;
-					d.pubDateSort = dateFormat.parse(d.pubDate);
+					d.viewDate = d.pubDate;
+					d.date = dateFormat.parse(d.pubDate);
 					d.name = d.name;
 					d.hero = d.hero;
 					d.company = d.company;
@@ -101,55 +154,152 @@
 				var facts = crossfilter(data);
 				var all = facts.groupAll();
 				
+				
+				//for heroCount
+				var heroDimension = facts.dimension(function (d) {
+					return d.hero;
+				});
+				
+				var heroGroup = heroDimension.group().reduceCount();
+				
+				// for yearCount
+				var yearDimension = facts.dimension(function (d) {
+					return d.date.getFullYear();
+				});
+				
+				var yearGroup = yearDimension.group().reduceCount();
+				
+				// monthly row chart
+				var monthly = facts.dimension(function (d) {
+					var month = d.date.getMonth();
+					switch (month) {
+						case 0:
+						return "00.Jan";
+						case 1:
+						return "01.Feb";
+						case 2:
+						return "02.Mar";
+						case 3:
+						return "03.Apr";
+						case 4:
+						return "04.May";
+						case 5:
+						return "05.Jun";
+						case 6:
+						return "06.Jul";
+						case 7:
+						return "07.Aug";
+						case 8:
+						return "08.Sep";
+						case 9:
+						return "09.Oct";
+						case 10:
+						return "10.Nov";
+						case 11:
+						return "11.Dec";
+					}
+				});
+				var monthlyGroup = monthly.group();
+				
 				// Pie Chart
 				var publishers = facts.dimension(function (d) {
-					if(d.company === "Marvel"){
-						return "Marvel";
-					} else{
-						return "DC";
-					}
+					return d.company.toUpperCase();
 				});
 				var publishersGroup = publishers.group();
 				
+				// Pie Chart color
+				
+				var colorScale = d3.scale.ordinal()
+					.range(["#518CCA", "#E23636"]);
+				
 				// Create datatable dimension
 				var timeDimension = facts.dimension(function (d) {
-					return d.pubDate;
+					return d.date;
 				});
 				
 				// Setup the charts
 				
 				// count all the facts
 				dc.dataCount(".dc-data-count")
-				.dimension(facts)
-				.group(all);
+					.dimension(facts)
+					.group(all);
+				
+				//Hero Chart
+				heroCountChart
+					.width(960)
+					.height(400)
+					.margins({top: 5, left: 10, right: 10, bottom: 20})
+					.dimension(heroDimension)
+					.transitionDuration(500)
+					.group(heroGroup)
+					.data(function (group) {
+						return group.top(10);
+					})
+					.ordinalColors(d3.scale.category10().range())
+					.title(function (d) {
+						return d.value;
+					})
+					.elasticX(true)
+					.xAxis().ticks(10);
+				
+				//Year Chart
+				yearCountChart
+					.width(960)
+					.height(300)
+					.dimension(yearDimension)
+					.group(yearGroup)
+					.transitionDuration(500)
+					.gap(5)
+					.centerBar(true)
+					.x(d3.scale.linear().domain([1996, 2017]))
+					.renderHorizontalGridLines(true)
+					.elasticY(true)
+					.xAxis().tickFormat(function (d) { return d; });
+				
+				// month chart
+				monthlyChart.width(480)
+					.height(300)
+					.margins({top: 5, left: 10, right: 10, bottom: 20})
+					.transitionDuration(500)
+					.dimension(monthly)
+					.group(monthlyGroup)
+					.colors(d3.scale.category10())
+					.label(function (d){
+						return d.key.split(".")[1];
+					})
+					.title(function(d){return d.value;})
+					.elasticX(true)
+					.xAxis().ticks(8);
 				
 				// publishers pie chart
-				publisherChart.width(250)
-				.height(220)
-				.radius(100)
-				.innerRadius(30)
-				.dimension(publishers)
-				.title(function(d){return d.value;})
-				.group(publishersGroup);
+				publisherChart.width(480)
+					.height(300)
+					.radius(150)
+					.innerRadius(0)
+					.colors(colorScale)
+					.dimension(publishers)
+					.title(function(d){return d.value;})
+					.group(publishersGroup);
 				
 				// Table of comic data
 				dataTable.width(960).height(800)
-				.dimension(timeDimension)
-				.size(10)
-				.columns([
-				function(d) { return d.pubDate; },
-				function(d) { return d.hero; },
-				function(d) { return d.name; },
-				function(d) { return d.company; },
-				function(d) { return d.price; },
-				function(d) { return d.pagecount; }
-				])
-				.sortBy(function(d){ return d.pubDateSort; })
-				.order(d3.ascending);
-				
-				// Render the Charts
-				dc.renderAll();
-				
+					.dimension(timeDimension)
+					.group(function(d) { return ""
+					})
+					.size(15)
+					.columns([
+					function(d) { return d.viewDate; },
+					function(d) { return d.hero; },
+					function(d) { return '<a href=\"https://www.mycomicshop.com/search?q=' + d.name +"\" target=\"_blank\">"+d.name+"</a>"},
+					function(d) { return d.company.toUpperCase(); },
+					function(d) { return d.price; },
+					function(d) { return d.pagecount; }
+					])
+					.sortBy(function(d){ return d.date; })
+					.order(d3.ascending);
+					
+					// Render the Charts
+					dc.renderAll();
 			});
 		</script>
 	</body>
