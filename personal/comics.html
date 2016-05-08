@@ -73,7 +73,7 @@
 				var dateFormat = d3.time.format("%B-%Y");
 				
 				data.forEach(function(d) {
-					d.pubDate = dateFormat.parse(+d.pubDate);
+					d.pubDate = dateFormat.parse(d.pubDate);
 					d.name = +d.name;
 					d.hero = +d.hero;
 					d.company = +d.company;
@@ -94,7 +94,7 @@
 				
 				// Create datatable dimension
 				var timeDimension = facts.dimension(function (d) {
-					return d.date;
+					return d.pubDate;
 				});
 				
 				// Setup the charts
@@ -120,7 +120,7 @@
 				})
 				.size(10)
 				.columns([
-				function(d) { return d.date; },
+				function(d) { return d.pubDate; },
 				function(d) { return d.hero; },
 				function(d) { return d.name; },
 				function(d) { return d.company; },
