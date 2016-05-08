@@ -82,8 +82,6 @@ d3.csv("comics.csv", function (data) {
 		d.ratio = +d.ratio;
 	});
    
-  });
-  
   // Run the data through crossfilter and load our 'facts'
   var facts = crossfilter(data);
   var all = facts.groupAll();
