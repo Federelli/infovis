@@ -87,7 +87,8 @@
 				var dateFormat = d3.time.format("%B-%Y");
 				
 				data.forEach(function(d) {
-					d.pubDate = dateFormat.parse(d.pubDate);
+					d.pubDate = d.pubDate;
+					d.pubDateSort = dateFormat.parse(d.pubDate);
 					d.name = d.name;
 					d.hero = d.hero;
 					d.company = d.company;
@@ -145,7 +146,7 @@
 				function(d) { return d.price; },
 				function(d) { return d.pagecount; }
 				])
-				.sortBy(function(d){ return d.pubDate; })
+				.sortBy(function(d){ return d.pubDateSort; })
 				.order(d3.ascending);
 				
 				// Render the Charts
