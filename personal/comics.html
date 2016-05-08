@@ -73,7 +73,7 @@
 				var dateFormat = d3.time.format("%B-%Y");
 				
 				data.forEach(function(d) {
-					d.pubDate = dateFormat.parse(d.date);
+					d.pubDate = dateFormat.parse(+d.date);
 					d.name = +d.name;
 					d.hero = +d.hero;
 					d.company = +d.company;
