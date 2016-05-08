@@ -30,9 +30,7 @@
 			}
 		</style>
 	</head>
-	
 	<body>
-		
 		<div class='container' style='font: 12px sans-serif;'>
 			<div class="dc-data-count" style="float: left;">
 				<h2>Comicbook Trade Paperback Stats
@@ -58,6 +56,22 @@
 						</span>
 					</h4>
 				</div>   
+			</div>
+			<div class='row'>
+				<div class='span12'>
+					<table class='table table-hover' id='dc-table-graph'>
+						<thead>
+							<tr class='header'>
+								<th>Date</th>
+								<th>Hero</th>
+								<th>Title</th>
+								<th>Publisher</th>
+								<th>Price</th>
+								<th>Page Count</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
 		
@@ -88,10 +102,11 @@
 				
 				// Pie Chart
 				var publishers = facts.dimension(function (d) {
-					if(d.company == "Marvel")
+					if(d.company == "Marvel"){
 						return "Marvel";
-					else
+					} else{
 						return "DC";
+					}
 				});
 				var publishersGroup = publishers.group();
 				
@@ -116,10 +131,10 @@
 				.title(function(d){return d.value;})
 				.group(publishersGroup);
 				
-				// Table of earthquake data
+				// Table of comic data
 				dataTable.width(960).height(800)
 				.dimension(timeDimension)
-				.group(function(d) { return "Earthquake Table"
+				.group(function(d) { return "Comic Book Table"
 				})
 				.size(10)
 				.columns([
@@ -138,6 +153,5 @@
 				
 			});
 		</script>
-		
 	</body>
 </html>
