@@ -88,9 +88,9 @@
 				
 				data.forEach(function(d) {
 					d.pubDate = dateFormat.parse(d.pubDate);
-					d.name = +d.name;
-					d.hero = +d.hero;
-					d.company = +d.company;
+					d.name = d.name;
+					d.hero = d.hero;
+					d.company = d.company;
 					d.price = +d.price;
 					d.pagecount = +d.pagecount;
 					d.ratio = +d.ratio;
@@ -102,7 +102,7 @@
 				
 				// Pie Chart
 				var publishers = facts.dimension(function (d) {
-					if(d.company == "Marvel"){
+					if(d.company === "Marvel"){
 						return "Marvel";
 					} else{
 						return "DC";
@@ -145,7 +145,7 @@
 				function(d) { return d.price; },
 				function(d) { return d.pagecount; }
 				])
-				.sortBy(function(d){ return d.dtg; })
+				.sortBy(function(d){ return d.pubDate; })
 				.order(d3.ascending);
 				
 				// Render the Charts
