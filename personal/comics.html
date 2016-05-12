@@ -9,9 +9,9 @@
 		<script src='js/crossfilter.js' type='text/javascript'></script>
 		<script src='js/dc.js' type='text/javascript'></script>
 		<script src='js/jquery-1.12.3.min.js' type='text/javascript'></script>
-		<script src='js/bootstrap.min.js' type='text/javascript'></script>
+		<script src='js/bootstrap.js' type='text/javascript'></script>
 		
-		<link href='css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+		<link href='css/bootstrap.css' rel='stylesheet' type='text/css'>
 		<link href='css/dc.css' rel='stylesheet' type='text/css'>
 		
 		<style type="text/css"></style>
@@ -77,8 +77,7 @@
 						</span>
 					</h4>
 				</div>
-				<div class='col-md-4'>
-					<div class='col-md-12' id='dc-yearcount-chart'>
+				<div class='col-md-4' id='dc-yearcount-chart'>
 					<h4>
 						Comics per year
 						<span>
@@ -87,9 +86,6 @@
 					</h4>
 				</div>
 			</div>
-			</div>
-		
-			
 		
 			<div class='row'>
 				<div class='col-md-12'>
@@ -110,7 +106,7 @@
 			
 			<div class='row well'>
 				<div class='span12'>
-					<button type="button" class="btn btn-warning btn-lg col-md-3">
+					<button type="button" class="btn btn-warning btn-lg col-md-3" data-toggle="tooltip" data-placement="left" title="Tooltip on left">
 						<h1><span style="display: inline-block;vertical-align: middle;float: none;" class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> 4989.25</h1>
 					</button>
 					<button type="button" class="btn btn-info btn-lg col-md-3">
@@ -230,7 +226,7 @@
 				
 				//Hero Chart
 				heroCountChart
-					.width(1150)
+					.width(1130)
 					.height(400)
 					.margins({top: 5, left: 10, right: 10, bottom: 20})
 					.dimension(heroDimension)
