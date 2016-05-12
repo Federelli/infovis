@@ -35,8 +35,8 @@
 	</head>
 	<body>
 		<div class='container' style='font: 12px sans-serif;'>
-			<div class="dc-data-count" style="float: left;">
-				<h2>Comicbook Trade Paperback Stats
+			<div class="dc-data-count"">
+				<h2>Comicbook Trade Paperback Stats<br>
 					<span>
 						<span class="filter-count"></span>
 						selected out of 
@@ -48,15 +48,11 @@
 			</div>
 			
 			<div class='row'>
-				<div class='span12' id='dc-herocount-chart'>
+				<div class='col-md-12' id='dc-herocount-chart'>
 					<h4>
-						Top 10 Heroes
+						Top 15 Heroes
 						<span>
-							<a class="reset"
-							href="javascript:heroCountChart.filterAll();dc.redrawAll();"
-							style="display: none;">
-								reset
-							</a>
+							<a class="reset" href="javascript:heroCountChart.filterAll();dc.redrawAll();" style="display: none;"> reset </a>
 						</span>
 					</h4>
 					<div class="clearfix"></div>
@@ -64,51 +60,39 @@
 			</div>
 			
 			<div class='row'>
-				<div class='span12' id='dc-yearcount-chart'>
-					<h4>
-						Comics per year
-						<span>
-							<a class="reset"
-							href="javascript:yearCountChart.filterAll();dc.redrawAll();"
-							style="display: none;">
-								reset
-							</a>
-						</span>
-					</h4>
-				</div>
-			</div>
-				
-		
-			<div class='row'>
-				<div class='span6' id='dc-monthly-chart'>
+				<div class='col-md-4' id='dc-monthly-chart'>
 					<h4>
 						Comics per month
 						<span>
-							<a class="reset"
-							href="javascript:monthlyChart.filterAll();dc.redrawAll();"
-							style="display: none;">
-								reset
-							</a>
+							<a class="reset" href="javascript:monthlyChart.filterAll();dc.redrawAll();"	style="display: none;">	reset </a>
 						</span>
 					</h4>
 					<div class="clearfix"></div>
 				</div>
-				<div class='span6' id='dc-publisher-chart'>
-					<h4 class='text-center'>
+				<div class='col-md-4' id='dc-publisher-chart'>
+					<h4>
 						Publisher
 						<span>
-							<a class="reset"
-							href="javascript:publisherChart.filterAll();dc.redrawAll();"
-							style="display: none;">
-								reset
-							</a>
+							<a class="reset" href="javascript:publisherChart.filterAll();dc.redrawAll();" style="display: none;"> reset </a>
 						</span>
 					</h4>
-				</div>   
+				</div>
+				<div class='col-md-4'>
+					<div class='col-md-12' id='dc-yearcount-chart'>
+					<h4>
+						Comics per year
+						<span>
+							<a class="reset" href="javascript:yearCountChart.filterAll();dc.redrawAll();" style="display: none;"> reset </a>
+						</span>
+					</h4>
+				</div>
+			</div>
 			</div>
 		
+			
+		
 			<div class='row'>
-				<div class='span12'>
+				<div class='col-md-12'>
 					<table class='table table-hover' id='dc-table-graph'>
 						<thead>
 							<tr class='header'>
@@ -121,6 +105,23 @@
 							</tr>
 						</thead>
 					</table>
+				</div>
+			</div>
+			
+			<div class='row well'>
+				<div class='span12'>
+					<button type="button" class="btn btn-warning btn-lg col-md-3">
+						<h1><span style="display: inline-block;vertical-align: middle;float: none;" class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> 4989.25</h1>
+					</button>
+					<button type="button" class="btn btn-info btn-lg col-md-3">
+						<h1><span class="glyphicon glyphicon-file" aria-hidden="true"></span> 44740</h1>
+					</button>
+					<button type="button" class="btn btn-success btn-lg col-md-3">
+						<h1><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Watchmen</h1>
+					</button>
+					<button style="height:100%" type="button" class="btn btn-danger btn-lg col-md-3">
+						<h1><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Ms. Marvel</h1>
+					</button>
 				</div>
 			</div>
 		</div>
@@ -211,6 +212,9 @@
 				
 				var colorScale = d3.scale.ordinal()
 					.range(["#518CCA", "#E23636"]);
+					
+				//var heroScale = d3.scale.ordinal()
+				//	.range(["#3C3C3E", "#E23636", "#e9bb0e", "#de3d31", "#180b36", "#9c162e" ,"#AAAAAA" ,"#ed1806","#436fab","#000002","#9b1d21","#62554f","#0181e6","#45507e","#3c6a77"]);
 				
 				// Create datatable dimension
 				var timeDimension = facts.dimension(function (d) {
@@ -226,16 +230,17 @@
 				
 				//Hero Chart
 				heroCountChart
-					.width(960)
+					.width(1150)
 					.height(400)
 					.margins({top: 5, left: 10, right: 10, bottom: 20})
 					.dimension(heroDimension)
 					.transitionDuration(500)
 					.group(heroGroup)
 					.data(function (group) {
-						return group.top(10);
+						return group.top(15);
 					})
 					.ordinalColors(d3.scale.category10().range())
+					//.colors(heroScale)
 					.title(function (d) {
 						return d.value;
 					})
@@ -244,7 +249,7 @@
 				
 				//Year Chart
 				yearCountChart
-					.width(960)
+					.width(400)
 					.height(300)
 					.dimension(yearDimension)
 					.group(yearGroup)
@@ -257,7 +262,7 @@
 					.xAxis().tickFormat(function (d) { return d; });
 				
 				// month chart
-				monthlyChart.width(480)
+				monthlyChart.width(320)
 					.height(300)
 					.margins({top: 5, left: 10, right: 10, bottom: 20})
 					.transitionDuration(500)
@@ -267,12 +272,11 @@
 					.label(function (d){
 						return d.key.split(".")[1];
 					})
-					.title(function(d){return d.value;})
 					.elasticX(true)
 					.xAxis().ticks(8);
 				
 				// publishers pie chart
-				publisherChart.width(480)
+				publisherChart.width(320)
 					.height(300)
 					.radius(150)
 					.innerRadius(0)
@@ -286,7 +290,7 @@
 					.dimension(timeDimension)
 					.group(function(d) { return ""
 					})
-					.size(15)
+					.size(50)
 					.columns([
 					function(d) { return d.viewDate; },
 					function(d) { return d.hero; },
